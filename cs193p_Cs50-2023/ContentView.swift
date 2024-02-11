@@ -10,7 +10,7 @@ import SwiftUI
 struct ContentView: View {
     let emojis: [String] = ["🐶", "🐱", "🐭", "🐹", "🐰", "🦊", "🐻", "🐼", "🐨", "🐯", "🦁", "🐮", "🐷", "🐸", "🐙", "🐵", "🐔", "🐧", "🐦", "🐤", "🐣", "🐥", "🦆", "🦢", "🦉", "🦚", "🦜", "🐍", "🐢", "🦎", "🦖", "🦕", "🐬", "🐳", "🐋", "🦈", "🐊", "🐅", "🐆", "🦓", "🦌", "🦏", "🐘", "🦍", "🦒", "🐪", "🐫", "🦘", "🐃", "🐄", "🐎", "🐖", "🐏", "🐑", "🦙", "🐐", "🦌", "🐕", "🦮", "🐩", "🐈", "🐓", "🦃", "🦚", "🦜", "🦢", "🦩", "🕊️", "🦤", "🦔", "🦗", "🐞", "🐜", "🦟", "🦋", "🐛", "🐝", "🐌", "🐚", "🐠", "🐟", "🐡", "🦈", "🐙", "🐚", "🐬", "🐳", "🐋", "🦀", "🦞", "🦐", "🦑", "🐌", "🐚", "🐢", "🐍", "🦎", "🐊", "🐢", "🦔", "🦓", "🦏", "🐄", "🐖", "🐏", "🐑", "🦙", "🐐", "🦌", "🐕", "🦮", "🐩", "🐈", "🐓", "🦃", "🦚", "🦜", "🦢", "🦩", "🕊️", "🦤", "🦔", "🦗", "🐞", "🐜", "🦟", "🦋", "🐛", "🐝", "🐌", "🦋", "🦗", "🕷️", "🐜", "🐞", "🦗", "🦟", "🐝", "🐛", "🐌", "🦋", "🐞", "🐜", "🕷️", "🕸️", "🐢", "🐍", "🦎", "🐊", "🦕", "🐊", "🦓", "🦔", "🐿️", "🐇", "🦝", "🦨", "🦡", "🐾"]
 
-    @State var cardCount: Int = 145
+    @State var cardCount: Int = 2
     
     var body: some View {
         VStack {
@@ -32,9 +32,10 @@ struct ContentView: View {
     }
     
     var cards: some View {
-        LazyVGrid(columns: [GridItem(.adaptive(minimum: 65, maximum: 100))], content: {
-            ForEach(0..<cardCount, id: \.self) { index in
-                CardView(content: emojis[index])
+        LazyVGrid(columns: [GridItem(.adaptive(minimum: 120))], content: {
+            ForEach(emojis.prefix(cardCount), id: \.self) { emoji in
+                CardView(content: emoji)
+                    .aspectRatio(2/3, contentMode: .fit)
             }
         })
         .foregroundColor(.orange)
@@ -73,13 +74,13 @@ struct CardView : View {
     var body: some View {
         ZStack {
             let base = RoundedRectangle(cornerRadius: /*@START_MENU_TOKEN@*/25.0/*@END_MENU_TOKEN@*/)
-            if isFaceUp {
+            Group {
                 base.fill(.white)
                 base.strokeBorder(lineWidth: 2)
                 Text(content).font(.largeTitle)
-            } else {
-                base.fill(.green)
             }
+            .opacity(isFaceUp ? 1 : 0)
+            base.fill(.green).opacity(isFaceUp ? 0 : 1)
             
         }
         .onTapGesture {
